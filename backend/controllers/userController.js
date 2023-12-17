@@ -28,4 +28,11 @@ const getUserProfile = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "User profile" });
 });
 
-export { authUser };
+// @desc           Update user profile
+// route           PUT /api/users/profile
+// @access         Private
+const updateUserProfile = asyncHandler(async (req, res) => {
+  res.status(200).json({ message: "Update User profile" });
+});
+
+export { authUser, registerUser, logoutUser, getUserProfile, updateUserProfile };
