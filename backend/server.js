@@ -4,6 +4,7 @@ import dotenv from "dotenv"; // Import dotenv for managing environment variables
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js"; // Import custom error handling middleware
 import connectDB from "./config/db.js"; // Import the database connection function
 import userRoutes from "./routes/userRoutes.js"; // Import routes for user-related operations
+import cookieParser from "cookie-parser";
 
 // Configure environment variables
 dotenv.config(); // Load environment variables from a .env file into process.env
@@ -18,6 +19,7 @@ connectDB(); // Call the function to establish a connection to the database
 // Middleware setup
 app.use(express.json()); // Parse incoming requests with JSON payloads
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies for form submissions
+app.use(cookieParser()) //Parse cookies
 
 // Routes setup
 app.use("/api/users", userRoutes); // Mount the user routes at the '/api/users' base path

@@ -44,6 +44,16 @@ userSchema.pre('save', async function (next) {
   next();
 })
 
+// Adding a method to the user schema to compare entered password with the stored hashed password
+userSchema.methods.matchPasswords = async function(enteredPassword) {
+  // 'enteredPassword' is the password provided by the user during login
+  // 'this.password' refers to the hashed password stored in the user document's 'password' field
+  // Using 'bcrypt.compare' to compare the entered password with the stored hashed password asynchronously
+  // 'bcrypt.compare' returns a promise, hence the 'async' function and 'await' keyword is used
+  return await bcrypt.compare(enteredPassword, this.password);
+}
+
+
 const User = mongoose.model('User', userSchema)
 
 export default User
