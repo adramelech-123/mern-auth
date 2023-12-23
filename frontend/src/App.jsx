@@ -1,13 +1,15 @@
 import Header from "./components/Header"
-import HomeView from "./views/HomeView"
+import { Container } from "react-bootstrap"
+import { Outlet } from "react-router-dom"
 
 const App = () => {
   return (
     <>
-      <Header/>
-      <HomeView/>
-
+      <Header />
+      <Container className="my-2">
+        <Outlet />
+      </Container>
     </>
-  )
+  );
 }
 export default App
