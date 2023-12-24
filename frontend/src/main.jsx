@@ -9,6 +9,8 @@ import './index.css'
 import HomeView from './views/HomeView.jsx'
 import LoginView from './views/LoginView.jsx'
 import RegisterView from './views/RegisterView.jsx'
+import ProfileView from './views/ProfileView.jsx'
+import PrivateRoute from './components/PrivateRoute.jsx'
 
 
 const router = createBrowserRouter(
@@ -17,6 +19,11 @@ const router = createBrowserRouter(
       <Route index={true} path="/" element={<HomeView />} />
       <Route path="/login" element={<LoginView />} />
       <Route path="/register" element={<RegisterView />} />
+
+      {/* Private Routes */}
+      <Route path="" element={<PrivateRoute />}>
+        <Route path="/profile" element={<ProfileView />} />
+      </Route>
     </Route>
   )
 );

@@ -1,30 +1,28 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import FormContainer from "../components/FormContainer";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { setCredentials } from "../slices/authSlice";
-import Loader from "../components/Loader";
-import { useRegisterMutation } from "../slices/usersApiSlice";
+import { useUpdateUserMutation } from "../slices/usersApiSlice";
+import Loader from '../components/Loader'
 
-const RegisterView = () => {
+
+const ProfileView = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [register, { isLoading }] = useRegisterMutation();
   const { userInfo } = useSelector((state) => state.auth);
+  const [updateProfile, {isLoading}] = useUpdateUserMutation()
 
   useEffect(() => {
-    if (userInfo) {
-      navigate("/");
-    }
-  }, [navigate, userInfo]);
+    setName(userInfo.name)
+    setEmail(userInfo.email)
+  }, [userInfo.setName, userInfo.setEmail, userInfo.name, userInfo.email]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -32,18 +30,23 @@ const RegisterView = () => {
       toast.error("Passwords do not match!");
     } else {
       try {
-        const res = await register({ name, email, password }).unwrap();
-        dispatch(setCredentials({ ...res }));
-        navigate("/");
+        const res = await updateProfile({
+            _id: userInfo._id,
+            name,
+            email,
+            password
+        }).unwrap()
+        dispatch(setCredentials({...res}))
+        toast.success('Profile updated! 😁')
       } catch (err) {
-        toast.error(err?.data?.message || err.error);
+        toast.error(err?.data?.message || err.error)
       }
     }
   };
 
   return (
     <FormContainer>
-      <h1>Sign Up</h1>
+      <h1>Update Profile</h1>
       <Form onSubmit={submitHandler}>
         <Form.Group className="my-2" controlId="name">
           <Form.Label>Name</Form.Label>
@@ -88,16 +91,11 @@ const RegisterView = () => {
         {isLoading && <Loader/>}
 
         <Button type="submit" variant="primary" className="mt-3">
-          Sign Up
+          Update
         </Button>
 
-        <Row className="py-3">
-          <Col>
-            Already have an account? <Link to={"/login"}>Sign In</Link>
-          </Col>
-        </Row>
       </Form>
     </FormContainer>
   );
 };
-export default RegisterView;
+export default ProfileView;

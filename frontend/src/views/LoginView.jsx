@@ -6,6 +6,7 @@ import FormContainer from "../components/FormContainer";
 import { useLoginMutation } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authSlice";
 import { toast } from "react-toastify";
+import Loader from "../components/Loader";
 
 const LoginView = () => {
   const [email, setEmail] = useState("");
@@ -14,7 +15,7 @@ const LoginView = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const [login] = useLoginMutation()
+  const [login, {isLoading}] = useLoginMutation()
   const { userInfo } = useSelector((state) => state.auth)
 
   useEffect(() => {
@@ -47,9 +48,10 @@ const LoginView = () => {
                 <Form.Control type="password" placeholder="Enter password..." value={password} onChange={(e) => setPassword(e.target.value)}/>
             </Form.Group>
 
+            { isLoading && <Loader/>}
             <Button type="submit" variant="primary" className="mt-3">
                 Sign In
-            </Button>
+            </Button> 
 
             <Row className="py-3">
                 <Col>

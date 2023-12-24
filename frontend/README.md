@@ -146,3 +146,106 @@ The provided code snippet utilizes the `createApi` and `fetchBaseQuery` function
    This line exports the created `apiSlice`, allowing other parts of the application to import and use this configured API slice for defining and executing API requests using RTK Query.
 
 In summary, this code sets up an API slice using RTK Query from Redux Toolkit. It configures a base query with a specified base URL (currently empty), defines tag types for caching purposes, and provides a structure to define and manage various API endpoints.
+
+## UsersAPI Slice
+
+This code is using Redux Toolkit's `createApi` or `createAsyncThunk` for managing API requests. Let's break down the code block by block:
+
+### Import Statement
+```javascript
+import { apiSlice } from './apiSlice'
+```
+This line imports the `apiSlice` from a file named `'apiSlice'`. This imported `apiSlice` likely contains utility functions or configurations related to making API requests.
+
+### Constant Declaration
+```javascript
+const USERS_URL = 'api/users'
+```
+This line declares a constant variable `USERS_URL` and sets its value to `'api/users'`. It holds the base URL for user-related API endpoints.
+
+### `usersApiSlice` Definition
+```javascript
+export const usersApiSlice = apiSlice.injectEndpoints({
+  endpoints: (builder) => ({
+    login: builder.mutation({
+      query: (data) => ({
+        url: `${USERS_URL}/auth`,
+        method: "POST",
+        body: data,
+      }),
+    }),
+
+    logout: builder.mutation({
+      query: () => ({
+        url: `${USERS_URL}/logout`,
+        method: "POST",
+      }),
+    }),
+
+    register: builder.mutation({
+      query: (data) => ({
+        url: `${USERS_URL}`,
+        method: "POST",
+        body: data,
+      }),
+    }),
+
+    updateUser: builder.mutation({
+      query: (data) => ({
+        url: `${USERS_URL}/profile`,
+        method: "PUT",
+        body: data,
+      }),
+    })
+  }),
+});
+```
+This block of code defines an `usersApiSlice` using the `injectEndpoints` method from the `apiSlice`. It creates different API endpoints (`login`, `logout`, `register`, `updateUser`) using the `builder.mutation` method.
+
+The `builder.mutation()` method is a part of Redux Toolkit's API creation capabilities, specifically used within the `createApi` function. This method is used to define mutation endpoints within an API slice.
+
+Here's an explanation of the `builder.mutation()` method:
+
+### Purpose:
+- **Defining Mutations:** It's used to define mutations or actions that will interact with the API. Mutations generally correspond to HTTP requests (e.g., GET, POST, PUT, DELETE) and define how the API request should be made.
+
+### Parameters:
+- **Query Function:** The `builder.mutation()` method typically takes an object as an argument that contains a `query` property. This `query` property is a function that defines the details of the API request (such as URL, method, request body).
+
+### Anatomy of the `query` Function:
+- **URL:** It specifies the endpoint URL to which the API request will be sent. This URL is constructed based on the base URL (`USERS_URL` in this case) and additional path segments.
+- **Method:** It specifies the HTTP method used for the request (e.g., POST, PUT, DELETE).
+- **Body (optional):** If applicable (for POST or PUT requests), the `body` property includes the data to be sent with the request payload.
+
+### Usage:
+- **Within `builder.mutation()`:** Each `builder.mutation()` call defines a specific API action (such as login, logout, register, updateUser) by providing the necessary details through the `query` function.
+
+### Example:
+```javascript
+builder.mutation({
+  query: (data) => ({
+    url: `${USERS_URL}/auth`,
+    method: "POST",
+    body: data,
+  }),
+})
+```
+In this example:
+- The `query` function specifies a POST request to the `${USERS_URL}/auth` endpoint with the provided `data` as the request body.
+
+The `builder.mutation()` method plays a crucial role in defining API-related actions (mutations) within Redux Toolkit's API creation, allowing for efficient management and usage of API endpoints within the application.
+
+___
+
+- **`login`**: Defines a mutation for a login endpoint using the POST method. It constructs the URL as `${USERS_URL}/auth` and includes the `data` object in the request body.
+- **`logout`**: Defines a mutation for a logout endpoint using the POST method. It constructs the URL as `${USERS_URL}/logout`. It doesn't include a request body since it's a logout action.
+- **`register`**: Defines a mutation for a user registration endpoint using the POST method. It constructs the URL as `${USERS_URL}` and includes the `data` object in the request body.
+- **`updateUser`**: Defines a mutation for updating user profile information using the PUT method. It constructs the URL as `${USERS_URL}/profile` and includes the `data` object in the request body.
+
+### Export Statements
+```javascript
+export const { useLoginMutation, useLogoutMutation, useRegisterMutation, useUpdateUserMutation } = usersApiSlice
+```
+This line exports `useLoginMutation`, `useLogoutMutation`, `useRegisterMutation`, and `useUpdateUserMutation` from the `usersApiSlice`. These exported values likely contain hooks or functions that can be used within React components to perform the defined API operations (login, logout, register, update user).
+
+In summary, this code creates a set of API endpoints (`login`, `logout`, `register`, `updateUser`) with corresponding mutations and exports hooks or functions to use these mutations in React components, utilizing the configured `apiSlice` for managing API requests.
