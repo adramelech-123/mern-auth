@@ -1,9 +1,16 @@
-import {Navigate, Outlet } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+// Import necessary components from React Router DOM and React Redux
+import { Navigate, Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
 
+// Define a component called PrivateRoute
 const PrivateRoute = () => {
-  const {userInfo} = useSelector((state) => state.auth)
-  return userInfo ? <Outlet/> : <Navigate to={'/login'} replace/>
-}
+  // Access the userInfo from the Redux store using the useSelector hook
+  const { userInfo } = useSelector((state) => state.auth);
 
-export default PrivateRoute
+  // Check if userInfo exists; if it does, render the child components using <Outlet/>
+  // If userInfo doesn't exist, redirect to the '/login' route using <Navigate/>
+  return userInfo ? <Outlet /> : <Navigate to={"/login"} replace />;
+};
+
+// Export the PrivateRoute component as the default export
+export default PrivateRoute;

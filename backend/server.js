@@ -1,4 +1,5 @@
 // Import necessary modules and files
+import path from 'path'
 import express from "express"; // Import the Express framework
 import dotenv from "dotenv"; // Import dotenv for managing environment variables
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js"; // Import custom error handling middleware
@@ -23,7 +24,17 @@ app.use(cookieParser()) //Parse cookies
 
 // Routes setup
 app.use("/api/users", userRoutes); // Mount the user routes at the '/api/users' base path
-app.get("/", (req, res) => res.send("Server is ready!")); // Define a simple route for the root URL that returns 'Server is ready!'
+
+
+// Setup for production or development modes
+if(process.env.NODE_ENV === 'production') {
+    const __dirname = path.resolve()
+    app.use(express.static(path.join(__dirname, 'frontend/dist')))
+    app.get('*', (req, res) => res.sendFile(path.resolve(__dirname, 'frontend', 'dist', 'index.html')))
+} else {
+  app.get("/", (req, res) => res.send("Server is ready!")); // Define a simple route for the root URL that returns 'Server is ready!'
+}
+
 
 // Error handling middleware setup
 app.use(notFound); // Middleware to handle requests for undefined routes (404 Not Found)
